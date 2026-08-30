@@ -2,6 +2,11 @@ import { Analytics } from "@vercel/analytics/next"
 import { Inter, Plus_Jakarta_Sans } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
+import { Toaster } from "@/components/ui/toast"
+import { SessionProvider } from "@/lib/session-context"
+import { CartProvider } from "@/lib/cart-context"
+import { HeroSlidesProvider } from "@/lib/hero-slides-context"
+import { DemoModeBanner } from "@/components/litch/demo-mode-banner"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const jakarta = Plus_Jakarta_Sans({
@@ -52,7 +57,14 @@ export default function RootLayout({
       className={`${inter.variable} ${jakarta.variable} bg-background`}
     >
       <body className="font-sans antialiased">
-        {children}
+        <DemoModeBanner />
+        <SessionProvider>
+          <CartProvider>
+            <HeroSlidesProvider>
+              <Toaster>{children}</Toaster>
+            </HeroSlidesProvider>
+          </CartProvider>
+        </SessionProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>

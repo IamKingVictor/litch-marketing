@@ -1,26 +1,45 @@
+"use client"
+
+import Link from "next/link"
 import { Star } from "lucide-react"
-import type { View } from "@/lib/types"
 import type { Product } from "@/lib/mock-data"
 import { formatCurrency } from "@/lib/currency"
+import { useCart } from "@/lib/cart-context"
+import { useToast } from "@/lib/toast-context"
+import { useAsyncAction } from "@/lib/use-async-action"
 import { LitchButton } from "./button"
+
+function AddToCartButton({ product }: { product: Product }) {
+  const { add } = useCart()
+  const { toast } = useToast()
+  const { run, pending } = useAsyncAction(() => {
+    add(product)
+    toast(`Added "${product.name}" to cart`, "success")
+  }, 350)
+
+  return (
+    <LitchButton
+      onClick={() => run()}
+      secondary
+      className="mt-3 w-full py-2 text-xs"
+    >
+      {pending ? "Adding…" : "Add to cart"}
+    </LitchButton>
+  )
+}
 
 export function ProductGrid({
   items,
-  go,
-  add,
+  showAddToCart = false,
 }: {
   items: Product[]
-  go: (v: View) => void
-  add?: (p: Product) => void
+  showAddToCart?: boolean
 }) {
   return (
     <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
       {items.map((p) => (
         <article key={p.id} className="group">
-          <button
-            className="block w-full text-left"
-            onClick={() => go("product")}
-          >
+          <Link href={`/products/${p.id}`} className="block w-full text-left">
             <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
               <img
                 src={p.image}
@@ -49,16 +68,8 @@ export function ProductGrid({
                 4.9
               </span>
             </div>
-          </button>
-          {add && (
-            <LitchButton
-              onClick={() => add(p)}
-              secondary
-              className="mt-3 w-full py-2 text-xs"
-            >
-              Add to cart
-            </LitchButton>
-          )}
+          </Link>
+          {showAddToCart && <AddToCartButton product={p} />}
         </article>
       ))}
     </div>

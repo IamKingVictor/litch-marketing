@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import {
   Home as HomeIcon,
   Package,
@@ -7,37 +8,32 @@ import {
   Store,
   UserRound,
 } from "lucide-react"
-import type { View } from "@/lib/types"
+import { useCart } from "@/lib/cart-context"
 
-export function BottomNav({
-  go,
-  cartCount,
-}: {
-  go: (v: View) => void
-  cartCount: number
-}) {
+export function BottomNav() {
+  const { cartCount } = useCart()
   return (
     <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t bg-card px-2 py-3 text-[10px] font-semibold shadow-lg md:hidden">
-      <button onClick={() => go("home")}>
+      <Link href="/">
         <HomeIcon size={18} className="mx-auto mb-1" />
         Home
-      </button>
-      <button onClick={() => go("products")}>
+      </Link>
+      <Link href="/products">
         <Package size={18} className="mx-auto mb-1" />
         Browse
-      </button>
-      <button onClick={() => go("shops")}>
+      </Link>
+      <Link href="/shops">
         <Store size={18} className="mx-auto mb-1" />
         Shops
-      </button>
-      <button onClick={() => go("cart")}>
+      </Link>
+      <Link href="/cart">
         <ShoppingCart size={18} className="mx-auto mb-1" />
         Cart {cartCount ? `(${cartCount})` : ""}
-      </button>
-      <button onClick={() => go("login")}>
+      </Link>
+      <Link href="/login">
         <UserRound size={18} className="mx-auto mb-1" />
         Profile
-      </button>
+      </Link>
     </nav>
   )
 }
