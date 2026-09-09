@@ -49,12 +49,20 @@ export default function LoginPage() {
             placeholder="Email address"
             className="h-11 rounded-lg border bg-background px-3 text-sm"
           />
-          <PasswordInput
-            required
-            name="password"
-            placeholder="Password"
-            className="h-11 rounded-lg border bg-background px-3 text-sm"
-          />
+          <div>
+            <PasswordInput
+              required
+              name="password"
+              placeholder="Password"
+              className="h-11 w-full rounded-lg border bg-background px-3 text-sm"
+            />
+            <Link
+              href="/forgot-password"
+              className="mt-1.5 block text-right text-xs font-bold text-primary"
+            >
+              Forgot Password?
+            </Link>
+          </div>
           <LitchButton type="submit">
             {pending ? "Signing in…" : "Sign in"}
           </LitchButton>

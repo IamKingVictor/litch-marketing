@@ -26,7 +26,10 @@ const DELETE_AT_KEY = "litch-shop-delete-at"
 // Signup flows are mock and always succeed (they just create a session).
 // NOTE: this check runs in the browser, so it is NOT secure — fine for a
 // demo, not fine once real backend auth exists.
-const SELLER_DEMO_CREDENTIALS = { email: "vendor@gmail.com", password: "vendor" }
+const SELLER_DEMO_CREDENTIALS = {
+  email: "vendor@gmail.com",
+  password: "vendor",
+}
 const ADMIN_DEMO_CREDENTIALS = { email: "admin@gmail.com", password: "admin" }
 
 type SessionContextValue = {
@@ -36,6 +39,7 @@ type SessionContextValue = {
   loginSeller: (email: string, password: string) => boolean
   signupSeller: (email: string, name: string, shopName: string) => void
   loginAdmin: (email: string, password: string) => boolean
+  updateSession: (patch: Partial<Session>) => void
   logout: () => void
   scheduleShopDeletion: () => Date
   shopDeleteAt: Date | null
@@ -101,6 +105,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return false
   }
 
+  const updateSession = (patch: Partial<Session>) => {
+    const next = { ...session, ...patch }
+    persist(next)
+  }
+
   const logout = () => {
     persist(GUEST_SESSION)
     window.localStorage.removeItem(DELETE_AT_KEY)
@@ -124,6 +133,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         loginSeller,
         signupSeller,
         loginAdmin,
+        updateSession,
         logout,
         scheduleShopDeletion,
         shopDeleteAt,

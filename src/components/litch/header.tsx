@@ -45,7 +45,7 @@ export function Header() {
             <Store size={20} />
           </Link>
         )}
-        <Link href="/login" aria-label="Account">
+        <Link href="/profile" aria-label="Account">
           <UserRound size={20} />
         </Link>
         <Link href="/cart" aria-label="Cart" className="relative">

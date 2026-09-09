@@ -5,8 +5,10 @@ import "./globals.css"
 import { Toaster } from "@/components/ui/toast"
 import { SessionProvider } from "@/lib/session-context"
 import { CartProvider } from "@/lib/cart-context"
+import { WishlistProvider } from "@/lib/wishlist-context"
 import { HeroSlidesProvider } from "@/lib/hero-slides-context"
 import { DemoModeBanner } from "@/components/litch/demo-mode-banner"
+import { ThemeProvider } from "@/lib/theme-context"
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TWITTER, SITE_URL } from "@/lib/site"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -37,7 +39,14 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Good things, well made`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: `${SITE_NAME} logo` }],
+    images: [
+      {
+        url: "/og-default.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} logo`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -78,19 +87,23 @@ export default function RootLayout({
               "@type": "Organization",
               name: SITE_NAME,
               url: SITE_URL,
-              logo: `${SITE_URL}/brand/logo.png`,
+              logo: `${SITE_URL}/brand/logo.jpg`,
               description: SITE_DESCRIPTION,
             }),
           }}
         />
         <DemoModeBanner />
-        <SessionProvider>
-          <CartProvider>
-            <HeroSlidesProvider>
-              <Toaster>{children}</Toaster>
-            </HeroSlidesProvider>
-          </CartProvider>
-        </SessionProvider>
+        <ThemeProvider>
+          <SessionProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <HeroSlidesProvider>
+                  <Toaster>{children}</Toaster>
+                </HeroSlidesProvider>
+              </WishlistProvider>
+            </CartProvider>
+          </SessionProvider>
+        </ThemeProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>

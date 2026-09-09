@@ -99,7 +99,7 @@ export function ProductDetailClient({ productId }: { productId: string }) {
           </div>
         </div>
       </div>
-      <ProductReviews />
+      {/* <ProductReviews productId={p.id} /> */}
     </main>
   )
 }

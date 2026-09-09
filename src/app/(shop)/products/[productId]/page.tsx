@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { ArrowLeft } from "lucide-react"
 import { getProduct, products } from "@/lib/mock-data"
 import { formatCurrency } from "@/lib/currency"
-import { ProductAddToCartButton } from "@/components/litch/product-add-to-cart-button"
+import { ProductPurchasePanel } from "@/components/litch/product-purchase-panel"
 import { ProductReviews } from "@/components/litch/product-reviews"
 import { Breadcrumbs } from "@/components/litch/breadcrumbs"
 import { SITE_URL } from "@/lib/site"
@@ -23,7 +23,10 @@ export async function generateMetadata({
   if (!p) return { title: "Product not found" }
 
   const title = `${p.name} — ${p.shop}`
-  const description = p.description.length > 155 ? `${p.description.slice(0, 152)}...` : p.description
+  const description =
+    p.description.length > 155
+      ? `${p.description.slice(0, 152)}...`
+      : p.description
 
   return {
     title,
@@ -75,7 +78,10 @@ export default async function ProductDetailPage({
       <Breadcrumbs
         crumbs={[
           { label: "Products", href: "/products" },
-          { label: p.category, href: `/products?category=${encodeURIComponent(p.category)}` },
+          {
+            label: p.category,
+            href: `/products?category=${encodeURIComponent(p.category)}`,
+          },
           { label: p.name },
         ]}
       />
@@ -107,13 +113,10 @@ export default async function ProductDetailPage({
           <p className="mt-5 leading-7 text-muted-foreground">
             {p.description}
           </p>
-          <div className="mt-6 flex gap-3">
-            <ProductAddToCartButton product={p} />
-          </div>
+          <ProductPurchasePanel product={p} />
         </div>
       </div>
       <ProductReviews />
     </main>
   )
 }
-

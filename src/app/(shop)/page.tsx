@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
-import type { Metadata } from "next"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import {
   categories,
   categoryImages,
@@ -7,13 +10,8 @@ import {
 } from "@/lib/mock-data"
 import { ProductGrid } from "@/components/litch/product-grid"
 import { Footer } from "@/components/litch/footer"
-import { HeroCarousel } from "@/components/litch/hero-carousel"
+import { VendorProductCarousel } from "@/components/litch/vendor-product-carousel"
 import { HomeStorePortalBanner } from "@/components/litch/home-store-portal-banner"
-import { SITE_URL } from "@/lib/site"
-
-export const metadata: Metadata = {
-  alternates: { canonical: SITE_URL },
-}
 
 const TILE_COLORS = [
   "bg-[#e7d9d1]",
@@ -23,12 +21,27 @@ const TILE_COLORS = [
   "bg-[#ead7df]",
 ]
 
-export default function Home() {
+function HomePageContent() {
+  const router = useRouter()
+  const seenWelcome =
+    typeof window !== "undefined" &&
+    window.localStorage.getItem("litch-welcome-seen") === "true"
+
+  useEffect(() => {
+    if (!seenWelcome) {
+      router.replace("/welcome")
+    }
+  }, [router, seenWelcome])
+
+  if (!seenWelcome) {
+    return null
+  }
+
   return (
     <>
       <main className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-6 md:px-10">
         <HomeStorePortalBanner />
-        <HeroCarousel />
+        <VendorProductCarousel />
         <section>
           <div className="mb-4 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold">
@@ -80,4 +93,8 @@ export default function Home() {
       <Footer />
     </>
   )
+}
+
+export default function Home() {
+  return <HomePageContent />
 }

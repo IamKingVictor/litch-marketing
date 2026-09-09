@@ -3,18 +3,30 @@
 import Link from "next/link"
 import { Star } from "lucide-react"
 import { formatCurrency } from "@/lib/currency"
+import { getAverageRating } from "@/lib/mock-data"
 import { useCart, type CartProduct } from "@/lib/cart-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
 import { LitchButton } from "./button"
 
 function AddToCartButton({ product }: { product: CartProduct }) {
-  const { add } = useCart()
+  const { addToBag } = useCart()
   const { toast } = useToast()
+  const isService = "type" in product && product.type === "service"
   const { run, pending } = useAsyncAction(() => {
-    add(product)
-    toast(`Added "${product.name}" to cart`, "success")
+    addToBag(product)
+    toast(`Added "${product.name}" to Shopping Bag`, "success")
   }, 350)
+
+  if (isService) {
+    return (
+      <Link href={`/products/${product.id}`} className="block">
+        <LitchButton secondary className="mt-3 w-full py-2 text-xs">
+          View times &amp; book
+        </LitchButton>
+      </Link>
+    )
+  }
 
   return (
     <LitchButton
@@ -22,7 +34,7 @@ function AddToCartButton({ product }: { product: CartProduct }) {
       secondary
       className="mt-3 w-full py-2 text-xs"
     >
-      {pending ? "Adding…" : "Add to cart"}
+      {pending ? "Adding…" : "Add to bag"}
     </LitchButton>
   )
 }
@@ -63,7 +75,8 @@ export function ProductGrid({
                 )}
               </div>
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Star size={12} fill="currentColor" className="text-gold" /> 4.9
+                <Star size={12} fill="currentColor" className="text-gold" />{" "}
+                {getAverageRating(p.id)}
               </span>
             </div>
           </Link>
