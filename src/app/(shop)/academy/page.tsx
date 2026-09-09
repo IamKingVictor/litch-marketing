@@ -1,9 +1,20 @@
+import type { Metadata } from "next"
 import { academyCourses } from "@/lib/mock-data"
 import { LitchButton } from "@/components/litch/button"
+import { Breadcrumbs } from "@/components/litch/breadcrumbs"
+import { SITE_URL } from "@/lib/site"
+
+export const metadata: Metadata = {
+  title: "Litch Academy",
+  description:
+    "Free, practical courses for people starting or growing a small shop on Litch Marketing — pricing, photography, and getting your first customers.",
+  alternates: { canonical: `${SITE_URL}/academy` },
+}
 
 export default function AcademyPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 md:px-10">
+      <Breadcrumbs crumbs={[{ label: "Academy" }]} />
       <div className="rounded-2xl bg-primary p-8 text-primary-foreground md:p-12">
         <p className="text-xs font-bold uppercase tracking-[.2em] text-gold">
           Litch Academy

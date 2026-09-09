@@ -1,11 +1,22 @@
 import Link from "next/link"
+import type { Metadata } from "next"
 import { Star } from "lucide-react"
 import { shops } from "@/lib/mock-data"
 import { slugify } from "@/lib/slugify"
+import { Breadcrumbs } from "@/components/litch/breadcrumbs"
+import { SITE_URL } from "@/lib/site"
+
+export const metadata: Metadata = {
+  title: "All shops",
+  description:
+    "Meet the independent vendors selling on Litch Marketing — browse every shop by category, rating, and specialty.",
+  alternates: { canonical: `${SITE_URL}/shops` },
+}
 
 export default function ShopsPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 md:px-10">
+      <Breadcrumbs crumbs={[{ label: "Shops" }]} />
       <p className="text-xs font-bold uppercase tracking-[.16em] text-gold-600">
         Meet the makers
       </p>
@@ -19,7 +30,7 @@ export default function ShopsPage() {
           >
             <img
               src={s.banner}
-              alt={s.name}
+              alt={`${s.name} storefront banner`}
               className="h-48 w-full object-cover transition group-hover:scale-105"
             />
             <div className="p-5">
@@ -40,3 +51,4 @@ export default function ShopsPage() {
     </main>
   )
 }
+

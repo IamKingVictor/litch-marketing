@@ -34,7 +34,9 @@ export default function CartPage() {
                 className="flex gap-4 rounded-xl border bg-card p-3"
               >
                 <img
-                  src={i.product.image}
+                  src={
+                    "image" in i.product ? i.product.image : i.product.imageUrl
+                  }
                   alt={i.product.name}
                   className="size-20 rounded-lg object-cover"
                 />

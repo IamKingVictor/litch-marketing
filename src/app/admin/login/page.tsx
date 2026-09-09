@@ -8,6 +8,7 @@ import { LitchButton } from "@/components/litch/button"
 import { useSession } from "@/lib/session-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
+import { PasswordInput } from "@/components/litch/password-input"
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -15,16 +16,14 @@ export default function AdminLoginPage() {
   const { toast } = useToast()
   const [error, setError] = useState("")
 
-  const { run, pending } = useAsyncAction(
-    (email: string, password: string) => {
-      if (loginAdmin(email, password)) {
-        toast("Logged in as admin", "success")
-        router.push("/admin")
-      } else {
-        setError("Incorrect admin credentials.")
-      }
-    },
-  )
+  const { run, pending } = useAsyncAction((email: string, password: string) => {
+    if (loginAdmin(email, password)) {
+      toast("Logged in as admin", "success")
+      router.push("/admin")
+    } else {
+      setError("Incorrect admin credentials.")
+    }
+  })
 
   return (
     <main className="mx-auto max-w-md px-4 py-12">
@@ -37,9 +36,8 @@ export default function AdminLoginPage() {
           onSubmit={(e) => {
             e.preventDefault()
             const form = e.currentTarget
-            const email = (
-              form.elements.namedItem("email") as HTMLInputElement
-            ).value
+            const email = (form.elements.namedItem("email") as HTMLInputElement)
+              .value
             const password = (
               form.elements.namedItem("password") as HTMLInputElement
             ).value
@@ -55,10 +53,9 @@ export default function AdminLoginPage() {
             placeholder="Email address"
             className="h-11 rounded-lg border bg-background px-3 text-sm"
           />
-          <input
+          <PasswordInput
             required
             name="password"
-            type="password"
             placeholder="Password"
             className="h-11 rounded-lg border bg-background px-3 text-sm"
           />

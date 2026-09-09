@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Search } from "lucide-react"
 import { categories, products as initialProducts } from "@/lib/mock-data"
 import { ProductGrid } from "@/components/litch/product-grid"
+import { Breadcrumbs } from "@/components/litch/breadcrumbs"
 
 function ProductsPageInner() {
   const searchParams = useSearchParams()
@@ -34,6 +35,7 @@ function ProductsPageInner() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 md:px-10">
+      <Breadcrumbs crumbs={[{ label: "Products" }]} />
       <p className="text-xs font-bold uppercase tracking-[.16em] text-gold-600">
         Explore Litch
       </p>

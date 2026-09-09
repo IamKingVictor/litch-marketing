@@ -1,18 +1,16 @@
 "use client"
 
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react"
-import type { Product } from "@/lib/mock-data"
+import { createContext, useContext, useState, type ReactNode } from "react"
+import type { Product as MockProduct } from "@/lib/mock-data"
+import type { Product as ContextProduct } from "@/lib/products-context"
 
-export type CartItem = { product: Product; quantity: number }
+export type CartProduct = MockProduct | ContextProduct
+
+export type CartItem = { product: CartProduct; quantity: number }
 
 type CartContextValue = {
   cart: CartItem[]
-  add: (p: Product) => void
+  add: (p: CartProduct) => void
   updateQuantity: (productId: string, quantity: number) => void
   remove: (productId: string) => void
   clear: () => void
@@ -24,7 +22,7 @@ const CartContext = createContext<CartContextValue | null>(null)
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([])
 
-  const add = (p: Product) =>
+  const add = (p: CartProduct) =>
     setCart((items) =>
       items.some((i) => i.product.id === p.id)
         ? items.map((i) =>

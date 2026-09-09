@@ -1,0 +1,27 @@
+# Litch Marketing
+
+> Litch Marketing is a multivendor marketplace connecting shoppers with trusted independent stores. Customers browse products across categories, shop by individual vendor, and check out in one cart even when items come from multiple stores.
+
+## Key pages
+
+- [Home](/): featured categories and product highlights
+- [All products](/products): full catalog with search, category, and price sorting
+- [Categories](/categories): browse the marketplace by category
+- [Shops](/shops): directory of all vendor stores on the platform
+- [Academy](/academy): courses for people starting or growing a small shop
+
+## Vendors on the platform
+
+- Nike Store — fashion & apparel
+- Jazari Restaurant — restaurant & food
+- Apple Official Store — electronics
+- Home World — household & lifestyle
+- Kalaya Beauty — salon & beauty
+- Kings Carwash & Entertainment — entertainment & services
+- Carlos Pharmaceutics & Eye Clinic — health & pharmaceutics
+- Dixons Foods — groceries
+
+## Notes for automated agents
+
+- Individual product pages are at /products/{id}; individual shop pages are at /shops/{slug}.
+- Account, cart, and checkout pages require authentication and should not be indexed or scraped for pricing decisions — prices are demo data pending live backend integration.

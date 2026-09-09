@@ -49,7 +49,7 @@ export default function SellerProductsPage() {
           >
             <img
               src={p.image}
-              alt=""
+              alt={p.name}
               className="size-16 rounded-lg object-cover"
             />
             <div className="min-w-0 flex-1">

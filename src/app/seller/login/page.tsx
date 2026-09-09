@@ -10,6 +10,7 @@ import { categories } from "@/lib/mock-data"
 import { useSession } from "@/lib/session-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
+import { PasswordInput } from "@/components/litch/password-input"
 
 export default function SellerLoginPage() {
   const router = useRouter()
@@ -52,9 +53,7 @@ export default function SellerLoginPage() {
           <Link href="/">
             <Logo />
           </Link>
-          <span className="text-sm text-muted-foreground">
-            Seller account
-          </span>
+          <span className="text-sm text-muted-foreground">Seller account</span>
         </div>
 
         <div className="mt-6 flex rounded-lg border bg-background p-1 text-sm font-bold">
@@ -103,10 +102,9 @@ export default function SellerLoginPage() {
               placeholder="Email address"
               className="h-11 rounded-lg border bg-background px-3 text-sm"
             />
-            <input
+            <PasswordInput
               required
               name="password"
-              type="password"
               placeholder="Password"
               className="h-11 rounded-lg border bg-background px-3 text-sm"
             />
@@ -150,7 +148,7 @@ export default function SellerLoginPage() {
                     Become a seller
                   </h1>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Let's get you set up.
+                    Let&apos;s get you set up.
                   </p>
                 </div>
                 <input
@@ -178,9 +176,8 @@ export default function SellerLoginPage() {
                   placeholder="Country"
                   className="h-11 rounded-lg border bg-background px-3 text-sm"
                 />
-                <input
+                <PasswordInput
                   required
-                  type="password"
                   placeholder="Password"
                   className="h-11 rounded-lg border bg-background px-3 text-sm"
                 />

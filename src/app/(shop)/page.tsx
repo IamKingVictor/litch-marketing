@@ -1,9 +1,19 @@
 import Link from "next/link"
-import { categories, products as initialProducts } from "@/lib/mock-data"
+import type { Metadata } from "next"
+import {
+  categories,
+  categoryImages,
+  products as initialProducts,
+} from "@/lib/mock-data"
 import { ProductGrid } from "@/components/litch/product-grid"
 import { Footer } from "@/components/litch/footer"
 import { HeroCarousel } from "@/components/litch/hero-carousel"
 import { HomeStorePortalBanner } from "@/components/litch/home-store-portal-banner"
+import { SITE_URL } from "@/lib/site"
+
+export const metadata: Metadata = {
+  alternates: { canonical: SITE_URL },
+}
 
 const TILE_COLORS = [
   "bg-[#e7d9d1]",
@@ -36,13 +46,20 @@ export default function Home() {
               <Link
                 key={cat}
                 href={`/products?category=${encodeURIComponent(cat)}`}
-                className="group overflow-hidden rounded-xl border bg-card text-left"
+                className="group grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] overflow-hidden rounded-xl border bg-card text-left"
               >
                 <div
-                  className={`flex aspect-square items-end p-3 font-heading text-sm font-bold text-primary transition group-hover:bg-gold ${TILE_COLORS[i % TILE_COLORS.length]}`}
+                  className={`relative aspect-square overflow-hidden ${TILE_COLORS[i % TILE_COLORS.length]}`}
                 >
-                  {cat}
+                  <img
+                    src={categoryImages[cat]}
+                    alt={`${cat} category on Litch Marketing`}
+                    className="size-full object-cover opacity-90 transition group-hover:scale-105"
+                  />
                 </div>
+                <span className="flex min-w-0 items-center p-2 font-heading text-[11px] font-bold leading-tight text-primary md:p-3 md:text-sm">
+                  {cat}
+                </span>
               </Link>
             ))}
           </div>

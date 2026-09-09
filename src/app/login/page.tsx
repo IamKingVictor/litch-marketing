@@ -7,6 +7,7 @@ import { LitchButton } from "@/components/litch/button"
 import { useSession } from "@/lib/session-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
+import { PasswordInput } from "@/components/litch/password-input"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -48,10 +49,9 @@ export default function LoginPage() {
             placeholder="Email address"
             className="h-11 rounded-lg border bg-background px-3 text-sm"
           />
-          <input
+          <PasswordInput
             required
             name="password"
-            type="password"
             placeholder="Password"
             className="h-11 rounded-lg border bg-background px-3 text-sm"
           />

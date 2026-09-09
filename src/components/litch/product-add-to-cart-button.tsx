@@ -1,13 +1,12 @@
 "use client"
 
 import { Heart, ShoppingBag } from "lucide-react"
-import type { Product } from "@/lib/mock-data"
-import { useCart } from "@/lib/cart-context"
+import { useCart, type CartProduct } from "@/lib/cart-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
 import { LitchButton } from "./button"
 
-export function ProductAddToCartButton({ product }: { product: Product }) {
+export function ProductAddToCartButton({ product }: { product: CartProduct }) {
   const { add } = useCart()
   const { toast } = useToast()
   const { run, pending } = useAsyncAction(() => {

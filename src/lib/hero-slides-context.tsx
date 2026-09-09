@@ -57,6 +57,9 @@ export function HeroSlidesProvider({ children }: { children: ReactNode }) {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (raw) {
       try {
+        // Hydrate from localStorage on mount — not available during SSR,
+        // so it can't be read in the initial useState.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSlidesState(JSON.parse(raw))
       } catch {
         // ignore malformed storage
