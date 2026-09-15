@@ -32,16 +32,13 @@ function resolveTheme(mode: ThemeMode): "light" | "dark" {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>("system")
-
-  useEffect(() => {
+  const [theme, setThemeState] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") return "light"
     const stored = window.localStorage.getItem(THEME_KEY) as ThemeMode | null
-    const nextTheme =
-      stored === "light" || stored === "dark" || stored === "system"
-        ? stored
-        : "system"
-    setThemeState(nextTheme)
-  }, [])
+    return stored === "light" || stored === "dark" || stored === "system"
+      ? stored
+      : "light"
+  })
 
   useEffect(() => {
     const root = document.documentElement

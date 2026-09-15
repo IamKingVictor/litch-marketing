@@ -87,6 +87,22 @@ export default function SignupPage() {
               placeholder="Password"
               className="h-11 rounded-lg border bg-background px-3 text-sm"
             />
+            <label className="flex items-start gap-2 text-sm text-muted-foreground">
+              <input
+                required
+                type="checkbox"
+                className="mt-0.5 size-4 rounded border-border accent-secondary"
+              />
+              <span>
+                I agree to the{" "}
+                <Link
+                  href="/terms"
+                  className="font-bold text-primary underline underline-offset-2"
+                >
+                  Terms and Conditions
+                </Link>
+              </span>
+            </label>
             <LitchButton type="submit">
               Send OTP <ArrowRight size={16} />
             </LitchButton>

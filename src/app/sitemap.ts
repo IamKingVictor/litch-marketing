@@ -14,11 +14,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/signup`, changeFrequency: "yearly", priority: 0.2 },
   ]
 
-  const shopRoutes: MetadataRoute.Sitemap = shops.map((s) => ({
+  // Parallex is intentionally direct-only and must not be advertised in the sitemap.
+  const shopRoutes: MetadataRoute.Sitemap = shops
+    .filter((s) => s.name !== "Parallex Bank")
+    .map((s) => ({
     url: `${SITE_URL}/shops/${slugify(s.name)}`,
     changeFrequency: "weekly",
     priority: 0.7,
-  }))
+    }))
 
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
     url: `${SITE_URL}/products/${p.id}`,

@@ -116,7 +116,7 @@ export default async function ProductDetailPage({
           <ProductPurchasePanel product={p} />
         </div>
       </div>
-      <ProductReviews />
+      <ProductReviews productId={p.id} />
     </main>
   )
 }

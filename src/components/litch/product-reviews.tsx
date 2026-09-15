@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Star } from "lucide-react"
-import { getAverageRating, getReviews } from "@/lib/mock-data"
+import { getReviews } from "@/lib/mock-data"
 import { LitchButton } from "./button"
 
 export function ProductReviews({ productId }: { productId: string }) {
@@ -11,7 +11,9 @@ export function ProductReviews({ productId }: { productId: string }) {
   const [review, setReview] = useState("")
   const [rating, setRating] = useState(5)
   const average = reviews.length
-    ? Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10
+    ? Math.round(
+        (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10,
+      ) / 10
     : 0
 
   return (

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect } from "react"
+import { useEffect, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
 import {
   categories,
@@ -11,7 +11,6 @@ import {
 import { ProductGrid } from "@/components/litch/product-grid"
 import { Footer } from "@/components/litch/footer"
 import { VendorProductCarousel } from "@/components/litch/vendor-product-carousel"
-import { HomeStorePortalBanner } from "@/components/litch/home-store-portal-banner"
 
 const TILE_COLORS = [
   "bg-[#e7d9d1]",
@@ -23,25 +22,27 @@ const TILE_COLORS = [
 
 function HomePageContent() {
   const router = useRouter()
-  const seenWelcome =
-    typeof window !== "undefined" &&
-    window.localStorage.getItem("litch-welcome-seen") === "true"
+  const welcomeSeen = useSyncExternalStore(
+    () => () => undefined,
+    () => window.localStorage.getItem("litch-welcome-seen") === "true",
+    () => false,
+  )
 
   useEffect(() => {
-    if (!seenWelcome) {
+    if (!welcomeSeen) {
       router.replace("/welcome")
     }
-  }, [router, seenWelcome])
+  }, [router, welcomeSeen])
 
-  if (!seenWelcome) {
+  if (!welcomeSeen) {
     return null
   }
 
   return (
     <>
-      <main className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-6 md:px-10">
-        <HomeStorePortalBanner />
+      <main className="mx-auto flex w-full max-w-[1400px] flex-col gap-10 px-4 py-6 md:px-8 lg:px-12">
         <VendorProductCarousel />
+
         <section>
           <div className="mb-4 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold">
@@ -54,12 +55,14 @@ function HomePageContent() {
               View all
             </Link>
           </div>
-          <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+          {/* Horizontal scroller — Amazon/Jumia-style category rail instead of
+              wrapping into a grid, so it stays a single scannable row. */}
+          <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {categories.slice(1).map((cat, i) => (
               <Link
                 key={cat}
                 href={`/products?category=${encodeURIComponent(cat)}`}
-                className="group grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] overflow-hidden rounded-xl border bg-card text-left"
+                className="group flex w-36 shrink-0 flex-col overflow-hidden rounded-xl border bg-card text-left sm:w-44"
               >
                 <div
                   className={`relative aspect-square overflow-hidden ${TILE_COLORS[i % TILE_COLORS.length]}`}
@@ -70,13 +73,14 @@ function HomePageContent() {
                     className="size-full object-cover opacity-90 transition group-hover:scale-105"
                   />
                 </div>
-                <span className="flex min-w-0 items-center p-2 font-heading text-[11px] font-bold leading-tight text-primary md:p-3 md:text-sm">
+                <span className="flex min-w-0 items-center p-2.5 font-heading text-xs font-bold leading-tight text-primary sm:text-sm">
                   {cat}
                 </span>
               </Link>
             ))}
           </div>
         </section>
+
         <section>
           <div className="mb-4 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold">Fresh finds</h2>
@@ -87,7 +91,12 @@ function HomePageContent() {
               See all
             </Link>
           </div>
-          <ProductGrid items={initialProducts.slice(0, 4)} showAddToCart />
+          <ProductGrid
+            items={initialProducts
+              .filter((p) => p.type === "product")
+              .slice(0, 8)}
+            showAddToCart
+          />
         </section>
       </main>
       <Footer />

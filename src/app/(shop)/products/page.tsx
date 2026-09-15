@@ -20,6 +20,7 @@ function ProductsPageInner() {
       initialProducts
         .filter(
           (p) =>
+            p.type === "product" &&
             (cat === "All" || p.category === cat) &&
             p.name.toLowerCase().includes(query.toLowerCase()),
         )
@@ -34,7 +35,7 @@ function ProductsPageInner() {
   )
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 md:px-10">
+    <main className="mx-auto w-full max-w-[1400px] px-4 py-8 md:px-8 lg:px-12">
       <Breadcrumbs crumbs={[{ label: "Products" }]} />
       <p className="text-xs font-bold uppercase tracking-[.16em] text-gold-600">
         Explore Litch
@@ -53,24 +54,30 @@ function ProductsPageInner() {
             className="h-11 w-full rounded-lg border bg-card pl-10 text-sm"
           />
         </div>
-        <select
-          value={cat}
-          onChange={(e) => setCat(e.target.value)}
-          className="h-11 rounded-lg border bg-card px-3 text-sm"
-        >
-          {categories.map((c) => (
-            <option key={c}>{c}</option>
-          ))}
-        </select>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="h-11 rounded-lg border bg-card px-3 text-sm"
-        >
-          <option>Featured</option>
-          <option>Price: low to high</option>
-          <option>Price: high to low</option>
-        </select>
+        <label className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
+          Categories
+          <select
+            value={cat}
+            onChange={(e) => setCat(e.target.value)}
+            className="h-11 rounded-lg border bg-card px-3 text-sm font-normal text-foreground"
+          >
+            {categories.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
+          Sort
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="h-11 rounded-lg border bg-card px-3 text-sm font-normal text-foreground"
+          >
+            <option>Featured</option>
+            <option>Price: low to high</option>
+            <option>Price: high to low</option>
+          </select>
+        </label>
       </div>
       <p className="my-6 text-sm text-muted-foreground">
         {visible.length} products

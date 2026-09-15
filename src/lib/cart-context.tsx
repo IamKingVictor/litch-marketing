@@ -2,9 +2,8 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react"
 import type { Product as MockProduct } from "@/lib/mock-data"
-import type { Product as ContextProduct } from "@/lib/products-context"
 
-export type CartProduct = MockProduct | ContextProduct
+export type CartProduct = MockProduct
 
 export type CartItem = {
   product: CartProduct
@@ -22,7 +21,10 @@ export type BookingItem = {
 type CartContextValue = {
   // Shopping Bag — products only.
   bag: CartItem[]
-  addToBag: (p: CartProduct, options?: { size?: string; color?: string }) => void
+  addToBag: (
+    p: CartProduct,
+    options?: { size?: string; color?: string },
+  ) => void
   updateBagQuantity: (productId: string, quantity: number) => void
   removeFromBag: (productId: string) => void
   clearBag: () => void
@@ -65,17 +67,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
           i.color === options?.color,
       )
         ? items.map((i) =>
-            i.product.id === p.id && i.size === options?.size && i.color === options?.color
+            i.product.id === p.id &&
+            i.size === options?.size &&
+            i.color === options?.color
               ? { ...i, quantity: i.quantity + 1 }
               : i,
           )
-        : [...items, { product: p, quantity: 1, size: options?.size, color: options?.color }],
+        : [
+            ...items,
+            {
+              product: p,
+              quantity: 1,
+              size: options?.size,
+              color: options?.color,
+            },
+          ],
     )
 
   const updateBagQuantity = (productId: string, quantity: number) =>
     setBag((items) =>
       items.map((i) =>
-        i.product.id === productId ? { ...i, quantity: Math.max(1, quantity) } : i,
+        i.product.id === productId
+          ? { ...i, quantity: Math.max(1, quantity) }
+          : i,
       ),
     )
 
@@ -90,7 +104,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const removeBooking = (productId: string, date: string, timeSlot: string) =>
     setBookings((items) =>
       items.filter(
-        (i) => !(i.product.id === productId && i.date === date && i.timeSlot === timeSlot),
+        (i) =>
+          !(
+            i.product.id === productId &&
+            i.date === date &&
+            i.timeSlot === timeSlot
+          ),
       ),
     )
 

@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
               Check your inbox
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              If an account exists for <b>{email}</b>, we've sent a link to
+              If an account exists for <b>{email}</b>, we&apos;ve sent a link to
               reset your password.
             </p>
             <Link
@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
               Forgot password?
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Enter the email on your account and we'll send you a link to
+              Enter the email on your account and we&apos;ll send you a link to
               reset your password.
             </p>
             <form

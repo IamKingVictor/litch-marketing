@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Check } from "lucide-react"
+import { Check, CreditCard, Landmark, WalletCards } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { useToast } from "@/lib/toast-context"
 import { useAsyncAction } from "@/lib/use-async-action"
@@ -10,16 +10,28 @@ import { formatCurrency } from "@/lib/currency"
 import { LitchButton } from "@/components/litch/button"
 
 export default function CheckoutPage() {
-  const { cart, clear } = useCart()
+  const { bag, clearBag } = useCart()
   const { toast } = useToast()
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [done, setDone] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<
+    "card" | "transfer" | "espees"
+  >("card")
+  const total = bag.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
+  )
+  const NAIRA_PER_ESPEE = 2050
+  // Assumption (option a): mock prices are treated as Naira for Espees only.
+  // Existing $ display remains unchanged until the catalog declares a currency.
+  const totalEspees = total / NAIRA_PER_ESPEE
 
   const { run: placeOrder, pending } = useAsyncAction(() => {
     // NOTE: previously the cart was never cleared after checkout completed —
     // items would still sit in the cart after a "successful" order. Fixed here.
-    clear()
+    // TODO: replace this UI-only branch with the selected payment SDK/API.
+    clearBag()
     toast("Order placed!", "success")
     setDone(true)
   }, 700)
@@ -65,7 +77,7 @@ export default function CheckoutPage() {
         {step === 1 && (
           <>
             <h2 className="font-heading text-xl font-bold">Review cart</h2>
-            {cart.map((i) => (
+            {bag.map((i) => (
               <div
                 key={i.product.id}
                 className="mt-4 flex justify-between text-sm"
@@ -83,9 +95,7 @@ export default function CheckoutPage() {
         )}
         {step === 2 && (
           <>
-            <h2 className="font-heading text-xl font-bold">
-              Delivery details
-            </h2>
+            <h2 className="font-heading text-xl font-bold">Delivery details</h2>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <input
                 placeholder="Full name"
@@ -115,19 +125,73 @@ export default function CheckoutPage() {
             <p className="mt-2 text-sm text-muted-foreground">
               Demo checkout — no payment will be charged.
             </p>
-            <input
-              placeholder="Card number"
-              className="mt-5 h-11 w-full rounded-lg border bg-background px-3 text-sm"
-            />
-            <LitchButton
-              onClick={() => placeOrder()}
-              className="mt-5 w-full"
-            >
+            <div className="mt-5 grid gap-3">
+              <PaymentOption
+                selected={paymentMethod === "card"}
+                onClick={() => setPaymentMethod("card")}
+                icon={<CreditCard size={18} />}
+                title="Pay with card"
+              />
+              <PaymentOption
+                selected={paymentMethod === "transfer"}
+                onClick={() => setPaymentMethod("transfer")}
+                icon={<Landmark size={18} />}
+                title="Pay with bank transfer"
+              />
+              <PaymentOption
+                selected={paymentMethod === "espees"}
+                onClick={() => setPaymentMethod("espees")}
+                icon={<WalletCards size={18} />}
+                title="Pay with Espees"
+              />
+            </div>
+            {paymentMethod === "card" && (
+              <input
+                placeholder="Card number"
+                className="mt-5 h-11 w-full rounded-lg border bg-background px-3 text-sm"
+              />
+            )}
+            {paymentMethod === "espees" && (
+              <p className="mt-4 rounded-lg bg-secondary/50 p-3 text-sm text-primary">
+                {formatCurrency(total)} assumed as ₦{total.toLocaleString()} ={" "}
+                {totalEspees.toFixed(6)} Espees. Rate: 1 Espee = ₦
+                {NAIRA_PER_ESPEE.toLocaleString()}.
+              </p>
+            )}
+            <LitchButton onClick={() => placeOrder()} className="mt-5 w-full">
               {pending ? "Placing order…" : "Place order"}
             </LitchButton>
           </>
         )}
       </div>
     </main>
+  )
+}
+
+function PaymentOption({
+  selected,
+  onClick,
+  icon,
+  title,
+}: {
+  selected: boolean
+  onClick: () => void
+  icon: React.ReactNode
+  title: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex items-center gap-3 rounded-xl border p-4 text-left text-sm font-bold ${selected ? "border-primary bg-secondary text-primary" : "border-border bg-background"}`}
+    >
+      <span className="flex size-9 items-center justify-center rounded-lg bg-card">
+        {icon}
+      </span>
+      <span className="flex-1">{title}</span>
+      <span
+        className={`size-4 rounded-full border-2 ${selected ? "border-primary bg-primary ring-2 ring-primary/20" : "border-muted-foreground"}`}
+      />
+    </button>
   )
 }
