@@ -6,6 +6,19 @@ import Link from "next/link"
 import { useSession } from "@/lib/session-context"
 import { LitchButton } from "@/components/litch/button"
 
+const adminTabs = [
+  { href: "/admin", label: "Overview" },
+  { href: "/admin/customers", label: "Customers" },
+  { href: "/admin/sellers", label: "Sellers" },
+  { href: "/admin/products", label: "Products" },
+  { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/commissions", label: "Commissions" },
+  { href: "/admin/payments", label: "Payments" },
+  { href: "/admin/payouts", label: "Payouts" },
+  { href: "/admin/reports", label: "Reports" },
+  { href: "/admin/hero", label: "Hero carousel" },
+]
+
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { session, hydrated } = useSession()
   const router = useRouter()
@@ -46,27 +59,20 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <LitchButton secondary>Back to storefront</LitchButton>
         </Link>
       </div>
-      <div className="mt-6 flex gap-2 border-b text-sm font-bold">
-        <Link
-          href="/admin"
-          className={`border-b-2 px-3 py-2 ${
-            pathname === "/admin"
-              ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground"
-          }`}
-        >
-          Shops
-        </Link>
-        <Link
-          href="/admin/hero"
-          className={`border-b-2 px-3 py-2 ${
-            pathname === "/admin/hero"
-              ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground"
-          }`}
-        >
-          Hero carousel
-        </Link>
+      <div className="mt-6 flex gap-1 overflow-x-auto border-b text-sm font-bold">
+        {adminTabs.map((tab) => (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`whitespace-nowrap border-b-2 px-3 py-2 ${
+              pathname === tab.href
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {tab.label}
+          </Link>
+        ))}
       </div>
       <div className="mt-6">{children}</div>
     </main>

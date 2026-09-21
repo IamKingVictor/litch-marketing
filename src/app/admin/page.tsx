@@ -1,124 +1,102 @@
-"use client"
+import Link from "next/link"
+import {
+  BarChart3,
+  Boxes,
+  CreditCard,
+  Landmark,
+  Package,
+  Percent,
+  Store,
+  Users,
+} from "lucide-react"
 
-import { useState } from "react"
-import { shops } from "@/lib/mock-data"
-import { useToast } from "@/lib/toast-context"
+const modules = [
+  {
+    label: "Customers",
+    description: "Manage user accounts",
+    href: "/admin/customers",
+    icon: Users,
+  },
+  {
+    label: "Sellers",
+    description: "Approve and suspend stores",
+    href: "/admin/sellers",
+    icon: Store,
+  },
+  {
+    label: "Products",
+    description: "Global catalog control",
+    href: "/admin/products",
+    icon: Boxes,
+  },
+  {
+    label: "Orders",
+    description: "View all orders",
+    href: "/admin/orders",
+    icon: Package,
+  },
+  {
+    label: "Commissions",
+    description: "Set platform fees",
+    href: "/admin/commissions",
+    icon: Percent,
+  },
+  {
+    label: "Payments",
+    description: "Global transactions",
+    href: "/admin/payments",
+    icon: CreditCard,
+  },
+  {
+    label: "Payouts",
+    description: "Process seller funds",
+    href: "/admin/payouts",
+    icon: Landmark,
+  },
+  {
+    label: "Reports",
+    description: "Analytics and growth",
+    href: "/admin/reports",
+    icon: BarChart3,
+  },
+]
 
-type ShopStatus = "active" | "pending" | "banned"
-
-export default function AdminShopsPage() {
-  const { toast } = useToast()
-  const [statuses, setStatuses] = useState<Record<string, ShopStatus>>(
-    Object.fromEntries(shops.map((s) => [s.name, "active" as ShopStatus])),
-  )
-  const [removed, setRemoved] = useState<Set<string>>(new Set())
-
-  const setStatus = (name: string, status: ShopStatus) => {
-    setStatuses((prev) => ({ ...prev, [name]: status }))
-    toast(
-      status === "active"
-        ? `${name} approved`
-        : `${name} banned/restricted`,
-      status === "active" ? "success" : "default",
-    )
-  }
-
-  const remove = (name: string) => {
-    setRemoved((prev) => new Set(prev).add(name))
-    toast(`${name} deleted`, "error")
-  }
-
-  const visibleShops = shops.filter((s) => !removed.has(s.name))
-
+export default function AdminOverviewPage() {
   return (
-    <div>
-      <div className="grid gap-4 md:grid-cols-4">
-        {[
-          ["GMV", "$128,000"],
-          ["Orders", "248"],
-          [
-            "Active shops",
-            String(
-              visibleShops.filter((s) => statuses[s.name] === "active")
-                .length,
-            ),
-          ],
-          [
-            "Pending review",
-            String(
-              visibleShops.filter((s) => statuses[s.name] === "pending")
-                .length,
-            ),
-          ],
-        ].map(([a, b]) => (
-          <div key={a} className="rounded-xl border bg-card p-5">
-            <p className="text-sm text-muted-foreground">{a}</p>
-            <p className="mt-2 font-heading text-2xl font-bold">{b}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-7 rounded-xl border bg-card p-5">
-        <h2 className="font-heading text-xl font-bold">Shops</h2>
-        <div className="mt-4 flex flex-col gap-3">
-          {visibleShops.map((s) => {
-            const status = statuses[s.name]
-            return (
-              <div
-                key={s.name}
-                className="flex flex-wrap items-center justify-between gap-3 border-b py-4 last:border-0"
-              >
-                <div>
-                  <p className="font-bold">{s.name}</p>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      status === "active"
-                        ? "bg-secondary text-primary"
-                        : status === "banned"
-                          ? "bg-destructive/10 text-destructive"
-                          : "bg-gold-50 text-gold-800"
-                    }`}
-                  >
-                    {status === "active"
-                      ? "Active"
-                      : status === "banned"
-                        ? "Banned"
-                        : "Pending review"}
-                  </span>
-                </div>
-                <div className="flex gap-2 text-xs font-bold">
-                  {status !== "active" && (
-                    <button
-                      onClick={() => setStatus(s.name, "active")}
-                      className="rounded-lg bg-primary px-3 py-1.5 text-primary-foreground"
-                    >
-                      Approve
-                    </button>
-                  )}
-                  {status !== "banned" && (
-                    <button
-                      onClick={() => setStatus(s.name, "banned")}
-                      className="rounded-lg border border-destructive px-3 py-1.5 text-destructive"
-                    >
-                      Ban / restrict
-                    </button>
-                  )}
-                  <button
-                    onClick={() => remove(s.name)}
-                    className="rounded-lg border px-3 py-1.5"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-          {visibleShops.length === 0 && (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              No shops left.
-            </p>
-          )}
-        </div>
-      </div>
+    <div className="space-y-6">
+      <section className="rounded-2xl bg-primary px-6 py-7 text-primary-foreground shadow-sm md:px-8">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground/60">
+          Control center
+        </p>
+        <h2 className="mt-2 font-heading text-2xl font-bold">
+          Platform overview
+        </h2>
+        <p className="mt-2 text-sm text-primary-foreground/65">
+          Select a module below to manage the marketplace.
+        </p>
+      </section>
+      <section className="grid gap-3 sm:grid-cols-2">
+        {modules.map((module) => {
+          const Icon = module.icon
+          return (
+            <Link
+              key={module.href}
+              href={module.href}
+              className="group rounded-2xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm"
+            >
+              <span className="flex size-10 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+                <Icon size={19} />
+              </span>
+              <h3 className="mt-5 font-heading text-base font-bold group-hover:text-primary">
+                {module.label}
+              </h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {module.description}
+              </p>
+            </Link>
+          )
+        })}
+      </section>
     </div>
   )
 }
